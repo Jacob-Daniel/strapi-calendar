@@ -1,0 +1,29 @@
+{
+	"compilerOptions": {
+		"target": "ES2020",
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"strictNullChecks": false,
+		"declaration": true,
+		"emitDeclarationOnly": true,
+		"isolatedModules": false,
+		"jsx": "react-jsx",
+		"allowJs": true,
+		"checkJs": false,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"types": [],
+		"paths": {
+			"@/*": ["admin/src/*"],
+			"@strapi/*": ["node_modules/@strapi/*"]
+		},
+		"typeRoots": ["./node_modules/@types"],
+		"baseUrl": ".",
+		"preserveSymlinks": true,
+		"skipLibCheck": true
+	},
+	"include": ["admin/src/**/*", "server/**/*", "types"],
+	"exclude": ["node_modules"]
+}

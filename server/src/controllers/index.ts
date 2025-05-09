@@ -1,5 +1,8 @@
-import controller from './controller';
+import createController from './controller';
+import type { Core } from '@strapi/strapi';
 
 export default {
-  controller,
+	controller: createController,
+} as {
+	controller: (deps: { strapi: Core.Strapi }) => ReturnType<typeof createController>;
 };
