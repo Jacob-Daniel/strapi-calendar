@@ -33,7 +33,6 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 		setSettings((prevSettings: SettingsType) => ({ ...prevSettings, ...newSetting }));
 	};
 
-	console.log(settings, 'context new s');
 	const saveSettings = async () => {
 		setSaving(true);
 		try {
