@@ -1,4 +1,5 @@
 import React from 'react';
+// @ts-ignore-next-line
 import { Layouts } from '@strapi/admin/strapi-admin';
 import { Cog, Plus } from '@strapi/icons';
 import tinyColor from 'tinycolor2';
@@ -17,92 +18,95 @@ import Illo from '../components/Calendar/Illo';
 import { useSettings } from '../context/Settings';
 
 const CalendarPage = () => {
-  const theme = useTheme();
+	const theme = useTheme();
 
-  const { settings, loading } = useSettings();
-  const { formatMessage } = useIntl();
+	const { settings, loading } = useSettings();
+	const { formatMessage } = useIntl();
 
-  if (loading) return <Loader />;
-  if (!settings.collection) {
-    return (
-      <>
-        <Layouts.Header
-          title={formatMessage({ id: getTranslation('plugin.name'), defaultMessage: 'Calendar' })}
-          subtitle={formatMessage({
-            id: getTranslation('plugin.tagline'),
-            defaultMessage: 'Visualize your events',
-          })}
-          as="h2"
-        />
-        <Layouts.Content>
-          <EmptyStateLayout
-            icon={<Illo />}
-            content={formatMessage({
-              id: getTranslation('view.calendar.state.empty.configure-settings.message'),
-              defaultMessage: 'Please configure the settings before accessing the calendar',
-            })}
-            action={
-              <LinkButton
-                variant="primary"
-                href={`/admin/settings/${PLUGIN_ID}`}
-                startIcon={<Cog color={'white'} />}
-              >
-                {formatMessage({
-                  id: getTranslation('view.calendar.state.empty.configure-settings.action'),
-                  defaultMessage: 'Settings',
-                })}
-              </LinkButton>
-            }
-          />
-        </Layouts.Content>
-      </>
-    );
-  }
+	if (loading) return <Loader />;
+	if (!settings.collection) {
+		return (
+			<>
+				<Layouts.Header
+					title={formatMessage({ id: getTranslation('plugin.name'), defaultMessage: 'Calendar' })}
+					subtitle={formatMessage({
+						id: getTranslation('plugin.tagline'),
+						defaultMessage: 'Visualize your events',
+					})}
+					as="h2"
+				/>
+				<Layouts.Content>
+					<EmptyStateLayout
+						icon={<Illo />}
+						content={formatMessage({
+							id: getTranslation('view.calendar.state.empty.configure-settings.message'),
+							defaultMessage: 'Please configure the settings before accessing the calendar',
+						})}
+						action={
+							// @ts-ignore-next-line
+							<LinkButton
+								// @ts-ignore-next-line
+								variant="primary"
+								href={`/admin/settings/${PLUGIN_ID}`}
+								startIcon={<Cog color={'white'} />}
+							>
+								{formatMessage({
+									id: getTranslation('view.calendar.state.empty.configure-settings.action'),
+									defaultMessage: 'Settings',
+								})}
+							</LinkButton>
+						}
+					/>
+				</Layouts.Content>
+			</>
+		);
+	}
 
-  const { monthView, weekView, workWeekView, dayView, defaultView, todayButton } = settings;
+	const { monthView, weekView, workWeekView, dayView, defaultView, todayButton } = settings;
 
-  // Define the views to be displayed
-  let views = '';
-  if (monthView) views += 'dayGridMonth,';
-  if (weekView) views += 'timeGridWeek,';
-  if (workWeekView) views += 'workWeek,';
-  if (dayView) views += 'dayView,';
-  views = views.slice(0, -1);
+	// Define the views to be displayed
+	let views = '';
+	if (monthView) views += 'dayGridMonth,';
+	if (weekView) views += 'timeGridWeek,';
+	if (workWeekView) views += 'workWeek,';
+	if (dayView) views += 'dayView,';
+	views = views.slice(0, -1);
 
-  // Define the buttons to be displayed
-  let left = 'prev,next' + (todayButton ? ' today' : '');
+	// Define the buttons to be displayed
+	let left = 'prev,next' + (todayButton ? ' today' : '');
 
-  // Define initial view
-  const initialView =
-    defaultView === 'Month'
-      ? 'dayGridMonth'
-      : defaultView === 'Week'
-        ? 'timeGridWeek'
-        : defaultView === 'Work-Week'
-          ? 'workWeek'
-          : defaultView === 'Day'
-            ? 'dayView'
-            : 'dayGridMonth';
+	// Define initial view
+	const initialView =
+		defaultView === 'Month'
+			? 'dayGridMonth'
+			: defaultView === 'Week'
+				? 'timeGridWeek'
+				: defaultView === 'Work-Week'
+					? 'workWeek'
+					: defaultView === 'Day'
+						? 'dayView'
+						: 'dayGridMonth';
 
-  const primaryAction = settings.createButton ? (
-    <LinkButton
-      startIcon={<Plus color={'white'} />}
-      href={`/admin/content-manager/collection-types/${settings.collection}/create`}
-    >
-      {formatMessage(
-        { id: getTranslation('view.calendar.action.create-entry'), defaultMessage: 'Create New' },
-        { collection: settings.collection?.split('.')[1] }
-      )}
-    </LinkButton>
-  ) : (
-    <div />
-  );
+	const primaryAction = settings.createButton ? (
+		// @ts-ignore-next-line
+		<LinkButton
+			startIcon={<Plus color={'white'} />}
+			href={`/admin/content-manager/collection-types/${settings.collection}/create`}
+		>
+			{formatMessage(
+				{ id: getTranslation('view.calendar.action.create-entry'), defaultMessage: 'Create New' },
+				{ collection: settings.collection?.split('.')[1] }
+			)}
+		</LinkButton>
+	) : (
+		<div />
+	);
 
-  // Override Styles
-  const primaryColor = settings.primaryColor;
-  const lightPrimaryColor = tinyColor(primaryColor).lighten().toString();
+	// Override Styles
+	const primaryColor = settings.primaryColor;
+	const lightPrimaryColor = tinyColor(primaryColor).lighten().toString();
 
-  const sty = `
+	const sty = `
     :root {
       --fc-page-bg-color: transparent;
       --fc-button-bg-color: ${primaryColor};
@@ -148,70 +152,70 @@ const CalendarPage = () => {
     }
   `;
 
-  return (
-    <>
-      <Layouts.Header
-        title={formatMessage({ id: getTranslation('plugin.name'), defaultMessage: 'Calendar' })}
-        subtitle={formatMessage({
-          id: getTranslation('plugin.tagline'),
-          defaultMessage: 'Visualize your events',
-        })}
-        as="h2"
-        primaryAction={primaryAction}
-      />
-      <Layouts.Content>
-        <Box
-          background={'neutral0'}
-          shadow="filterShadow"
-          padding={[5, 8]}
-          hasRadius
-          style={{
-            zIndex: 0,
-            position: 'relative',
-          }}
-        >
-          <style>{sty}</style>
-          <FullCalendar
-            events={`/${PLUGIN_ID}/`}
-            plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
-            initialView={initialView}
-            slotMinTime={settings.startHour}
-            slotMaxTime={settings.endHour}
-            allDaySlot={false}
-            views={{
-              workWeek: {
-                type: 'timeGrid',
-                duration: { week: 1 },
-                hiddenDays: [0, 6, 7],
-                buttonText: formatMessage({
-                  id: getTranslation('view.calendar.view.work-week'),
-                  defaultMessage: 'Work Week',
-                }),
-              },
-              dayView: {
-                type: 'timeGrid',
-                duration: { days: 1 },
-                buttonText: formatMessage({
-                  id: getTranslation('view.calendar.view.day'),
-                  defaultMessage: 'Day View',
-                }),
-              },
-            }}
-            height={'auto'}
-            locale={formatMessage({
-              id: getTranslation('view.calendar.locale'),
-              defaultMessage: 'en-US',
-            })}
-            headerToolbar={{
-              left,
-              center: 'title',
-              right: views,
-            }}
-          />
-        </Box>
-      </Layouts.Content>
-    </>
-  );
+	return (
+		<>
+			<Layouts.Header
+				title={formatMessage({ id: getTranslation('plugin.name'), defaultMessage: 'Calendar' })}
+				subtitle={formatMessage({
+					id: getTranslation('plugin.tagline'),
+					defaultMessage: 'Visualize your events',
+				})}
+				as="h2"
+				primaryAction={primaryAction}
+			/>
+			<Layouts.Content>
+				<Box
+					background={'neutral0'}
+					shadow="filterShadow"
+					padding={[5, 8]}
+					hasRadius
+					style={{
+						zIndex: 0,
+						position: 'relative',
+					}}
+				>
+					<style>{sty}</style>
+					<FullCalendar
+						events={`/${PLUGIN_ID}/`}
+						plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
+						initialView={initialView}
+						slotMinTime={settings.startHour}
+						slotMaxTime={settings.endHour}
+						allDaySlot={false}
+						views={{
+							workWeek: {
+								type: 'timeGrid',
+								duration: { week: 1 },
+								hiddenDays: [0, 6, 7],
+								buttonText: formatMessage({
+									id: getTranslation('view.calendar.view.work-week'),
+									defaultMessage: 'Work Week',
+								}),
+							},
+							dayView: {
+								type: 'timeGrid',
+								duration: { days: 1 },
+								buttonText: formatMessage({
+									id: getTranslation('view.calendar.view.day'),
+									defaultMessage: 'Day View',
+								}),
+							},
+						}}
+						height={'auto'}
+						locale={formatMessage({
+							id: getTranslation('view.calendar.locale'),
+							defaultMessage: 'en-US',
+						})}
+						headerToolbar={{
+							left,
+							center: 'title',
+							right: views,
+						}}
+					/>
+				</Box>
+			</Layouts.Content>
+		</>
+	);
 };
 
 export { CalendarPage };
