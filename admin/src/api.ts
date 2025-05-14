@@ -12,11 +12,9 @@ const api = {
 		return await axios.get(`/${PLUGIN_ID}/settings`);
 	},
 	getCollectionFilters: async (contentType: string) => {
-		console.log(contentType, 'contentType');
 		return await axios.get(`/${PLUGIN_ID}/collection-filters?contentType=${contentType}`);
 	},
 	setSettings: async (data: any) => {
-		console.log(data, 'api');
 		return axios.post(`/${PLUGIN_ID}/settings`, data);
 	},
 };

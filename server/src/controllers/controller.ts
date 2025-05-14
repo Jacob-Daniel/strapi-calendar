@@ -8,7 +8,7 @@ const createController = ({ strapi }: { strapi: Core.Strapi }): IPluginControlle
 		ctx.body = await strapi
 			.plugin(PLUGIN_ID)
 			.service('service')
-			.getData(ctx.query.start, ctx.query.end, ctx.query.filters);
+			.getData(ctx.query.start, ctx.query.end);
 	},
 	async getCollections(ctx: any): Promise<void> {
 		try {
@@ -52,7 +52,6 @@ const createController = ({ strapi }: { strapi: Core.Strapi }): IPluginControlle
 			const settings = await strapi.plugin(PLUGIN_ID).service('service').getSettings();
 			ctx.body = {
 				...settings,
-				filters: settings.filters || [],
 			};
 		} catch (err) {
 			ctx.throw(500, err);
