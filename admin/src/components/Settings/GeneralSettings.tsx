@@ -97,7 +97,7 @@ const GeneralSettings = () => {
 				<Typography variant="beta">
 					{formatMessage({
 						id: getTranslation('view.settings.section.general.title'),
-						defaultMessage: 'General settings!!',
+						defaultMessage: 'General settings',
 					})}
 				</Typography>
 			</Grid.Item>
@@ -175,7 +175,7 @@ const GeneralSettings = () => {
 							})}
 						</SingleSelectOption>
 						{fields
-							.filter((x) => x.type === 'datetime')
+							.filter((x) => x.type === 'datetime' || x.type === 'date')
 							.map((x) => (
 								<SingleSelectOption key={x.id} value={x.id}>
 									{x.id}
@@ -205,7 +205,7 @@ const GeneralSettings = () => {
 							})}
 						</SingleSelectOption>
 						{fields
-							.filter((x) => x.type === 'datetime')
+							.filter((x) => x.type === 'datetime' || x.type === 'date')
 							.map((x) => (
 								<SingleSelectOption key={x.id} value={x.id}>
 									{x.id}
@@ -251,6 +251,12 @@ const GeneralSettings = () => {
 							{formatMessage({
 								id: getTranslation('view.settings.section.general.duration.2h'),
 								defaultMessage: '2 Hours',
+							})}
+						</SingleSelectOption>
+						<SingleSelectOption value="1440">
+							{formatMessage({
+								id: getTranslation('view.settings.section.general.duration.24h'),
+								defaultMessage: '24 Hours',
 							})}
 						</SingleSelectOption>
 					</SingleSelect>

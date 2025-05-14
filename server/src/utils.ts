@@ -102,3 +102,17 @@ export const initHandlers = (
 
 	return [startHandler, endHandler];
 };
+
+export function normalizeDateValue(input: string | Date | null | undefined): string | null {
+	if (!input) return null;
+
+	if (input instanceof Date) {
+		return input.toISOString();
+	}
+
+	if (/^\d{4}-\d{2}-\d{2}$/.test(input)) {
+		return new Date(input + 'T00:00:00Z').toISOString();
+	}
+
+	return new Date(input).toISOString();
+}

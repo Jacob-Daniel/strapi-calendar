@@ -3,7 +3,7 @@ import moment from 'moment';
 import merge from 'deepmerge';
 import extensionSystem from './extensions';
 
-import { createDefaultConfig, getPluginStore, initHandlers } from '../utils';
+import { createDefaultConfig, getPluginStore, initHandlers, normalizeDateValue } from '../utils';
 import { SettingsType, CollectionFilter } from '../../../types';
 
 const service = ({ strapi }: { strapi: Core.Strapi }) => ({
@@ -36,10 +36,12 @@ const service = ({ strapi }: { strapi: Core.Strapi }) => ({
 		return dataFiltered.map((x) => ({
 			id: x.documentId,
 			title: config.titleField ? x[config.titleField] : config.startField,
-			start: x[config.startField],
-			end: config.endField
-				? x[config.endField]
-				: moment(x[config.startField]).add(config.defaultDuration, 'minutes'),
+			start: normalizeDateValue(x[config.startField]),
+			end: normalizeDateValue(
+				config.endField
+					? x[config.endField]
+					: moment(x[config.startField]).add(config.defaultDuration, 'minutes')
+			),
 			backgroundColor:
 				config.colorField && x[config.colorField] ? x[config.colorField] : config.eventColor,
 			borderColor:
