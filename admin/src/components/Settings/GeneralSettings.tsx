@@ -317,7 +317,7 @@ const GeneralSettings = () => {
 			<Grid.Item s={12}>
 				<Typography variant="beta">
 					{formatMessage({
-						id: 'view.settings.section.filters.title',
+						id: 'view.settings.section.general.filters-title',
 						defaultMessage: 'Collection Filters',
 					})}
 				</Typography>
@@ -328,7 +328,7 @@ const GeneralSettings = () => {
 						<Field.Root>
 							<Field.Label>
 								{formatMessage({
-									id: 'view.settings.section.filters.field.label',
+									id: 'view.settings.section.general.filters-field',
 									defaultMessage: 'Field',
 								})}
 							</Field.Label>
@@ -340,7 +340,7 @@ const GeneralSettings = () => {
 							>
 								<SingleSelectOption value="">
 									{formatMessage({
-										id: 'view.settings.section.filters.field.placeholder',
+										id: 'view.settings.section.general.filters-field-placeholder',
 										defaultMessage: 'Select field',
 									})}
 								</SingleSelectOption>
@@ -357,7 +357,7 @@ const GeneralSettings = () => {
 						<Field.Root>
 							<Field.Label>
 								{formatMessage({
-									id: 'view.settings.section.filters.operator.label',
+									id: 'view.settings.section.general.filters-operator',
 									defaultMessage: 'Operator',
 								})}
 							</Field.Label>
@@ -386,7 +386,7 @@ const GeneralSettings = () => {
 						<Field.Root>
 							<Field.Label>
 								{formatMessage({
-									id: 'view.settings.section.filters.value.label',
+									id: 'view.settings.section.general.filters-value',
 									defaultMessage: 'Value',
 								})}
 							</Field.Label>
@@ -394,7 +394,7 @@ const GeneralSettings = () => {
 								value={filter.value}
 								onChange={(e) => updateFilter(index, 'value', e.target.value)}
 								placeholder={formatMessage({
-									id: 'view.settings.section.filters.value.placeholder',
+									id: 'view.settings.section.general.filters-value-placeholder',
 									defaultMessage: 'Enter value',
 								})}
 							/>
@@ -404,7 +404,7 @@ const GeneralSettings = () => {
 					<Grid.Item s={1} style={{ display: 'flex', alignItems: 'flex-end' }}>
 						<Button variant="danger" onClick={() => removeFilter(index)}>
 							{formatMessage({
-								id: 'view.settings.section.filters.remove_button',
+								id: 'view.settings.section.general.filters-remove',
 								defaultMessage: 'Remove',
 							})}
 						</Button>
@@ -415,7 +415,7 @@ const GeneralSettings = () => {
 			<Grid.Item s={12}>
 				<Button onClick={addFilter}>
 					{formatMessage({
-						id: 'view.settings.section.filters.add_button',
+						id: 'view.settings.section.general.filters-add',
 						defaultMessage: 'Add Filter',
 					})}
 				</Button>
