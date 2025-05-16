@@ -44,6 +44,7 @@
   "view.settings.section.calendar.title": "Configuración de calendario",
   "view.settings.section.calendar.primary-color.title": "Color principal",
   "view.settings.section.calendar.event-color.title": "Color del evento",
+  "view.settings.section.calendar.event-status-color.title": "Color del estado del evento",
   "view.settings.section.calendar.times.clear": "Borrar hora",
   "view.settings.section.calendar.times.start.label": "Hora de comienzo",
   "view.settings.section.calendar.times.end.label": "Hora de finalización",

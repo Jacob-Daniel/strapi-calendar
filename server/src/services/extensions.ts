@@ -22,6 +22,7 @@ const extensionSystem = {
 	 * @param {Function} [startHandler] - Optional start handler function.
 	 * @param {Function} [endHandler] - Optional end handler function.
 	 * @param {Function} [filterHandler] - Optional filter handler function.
+	 * @param {Function} [statusHandler] - Optional status handler function.
 	 */
 	registerExtension: (
 		id: string,
@@ -31,7 +32,8 @@ const extensionSystem = {
 		filterFields: string[],
 		startHandler?: Function,
 		endHandler?: Function,
-		filterHandler?: Function
+		filterHandler?: Function,
+		statusHandler?: (entry: any) => string
 	): void => {
 		extensionSystem.extensions[id] = {
 			name,
@@ -41,6 +43,7 @@ const extensionSystem = {
 			startHandler,
 			endHandler,
 			filterHandler,
+			statusHandler,
 		};
 	},
 
@@ -59,7 +62,8 @@ const extensionSystem = {
 				extension.filterFields,
 				extension.startHandler,
 				extension.endHandler,
-				extension.filterHandler
+				extension.filterHandler,
+				extension.statusHandler
 			);
 		});
 	},
@@ -92,6 +96,16 @@ const extensionSystem = {
 	getCollectionFilters: (): string[] => {
 		return Array.from(
 			new Set(Object.values(extensionSystem.extensions).flatMap((ext) => ext.filterFields || []))
+		);
+	},
+	/**
+	 * Gets all status enum fields across all extensions.
+	 *
+	 * @returns {string[]} Array of status field names.
+	 */
+	getCollectionStatuses: (): string[] => {
+		return Array.from(
+			new Set(Object.values(extensionSystem.extensions).flatMap((ext) => ext.statusHandler || []))
 		);
 	},
 };

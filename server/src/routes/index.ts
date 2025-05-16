@@ -62,4 +62,13 @@ export default [
 			auth: false,
 		},
 	},
+	{
+		method: 'GET',
+		path: '/collection-statuses',
+		handler: 'controller.getCollectionStatuses',
+		config: {
+			policies: [],
+			auth: false,
+		},
+	},
 ];

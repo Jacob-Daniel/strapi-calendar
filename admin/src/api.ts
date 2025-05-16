@@ -14,6 +14,9 @@ const api = {
 	getCollectionFilters: async (contentType: string) => {
 		return await axios.get(`/${PLUGIN_ID}/collection-filters?contentType=${contentType}`);
 	},
+	getCollectionStatuses: async (contentType: string) => {
+		return await axios.get(`/${PLUGIN_ID}/collection-statuses?contentType=${contentType}`);
+	},
 	setSettings: async (data: any) => {
 		return axios.post(`/${PLUGIN_ID}/settings`, data);
 	},

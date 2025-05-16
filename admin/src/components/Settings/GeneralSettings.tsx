@@ -9,8 +9,12 @@ import {
 	Toggle,
 	TextInput,
 	Button,
+	Flex,
+	Box,
 } from '@strapi/design-system';
 import { Struct } from '@strapi/strapi';
+import styled from 'styled-components';
+import { ChromePicker } from 'react-color';
 
 import api from '../../api';
 import { getTranslation } from '../../utils/getTranslation';
@@ -24,7 +28,15 @@ const GeneralSettings = () => {
 	const [fields, setFields] = useState<Array<{ id: string; type: string }>>([]);
 	const [filters, setFilters] = useState<SettingsType['collectionFilters']>([]);
 	const [collectionFields, setCollectionFields] = useState<CollectionFilter[]>([]);
-
+	const [collectionStatuses, setCollectionStatuses] = useState<SettingsType['eventStatus']>([]);
+	const [popOver, setPopover] = useState<string | null>(null);
+	const [eventStatus, setEventStatus] = useState<
+		{
+			field: string | null;
+			value: string | null;
+			color: string | null;
+		}[]
+	>(settings.eventStatus);
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -64,11 +76,14 @@ const GeneralSettings = () => {
 		api.getCollectionFilters(settings.collection).then((response) => {
 			setCollectionFields(response.data || []);
 		});
-	}, [settings.collection, collections, extensions]);
+	}, [settings.collection, collections, extensions, settings.eventStatus]);
 
 	useEffect(() => {
+		api.getCollectionStatuses(settings.collection).then((response) => {
+			setCollectionStatuses(response.data || []);
+		});
 		setFilters(settings.collectionFilters || []);
-	}, [settings.collectionFilters]);
+	}, [settings.collectionFilters, settings.collection]);
 
 	const addFilter = () => {
 		setFilters((prev) => {
@@ -90,7 +105,6 @@ const GeneralSettings = () => {
 		setFilters(newFilters);
 		updateField({ collectionFilters: newFilters.length ? newFilters : [] });
 	};
-
 	return (
 		<Grid.Root gap={4}>
 			<Grid.Item s={12}>
@@ -284,7 +298,7 @@ const GeneralSettings = () => {
 							})}
 						</SingleSelectOption>
 						{fields
-							.filter((x) => x.type === 'string')
+							.filter((x) => ['string', 'enumeration'].includes(x.type))
 							.map((x) => (
 								<SingleSelectOption key={x.id} value={x.id}>
 									{x.id}
@@ -426,8 +440,89 @@ const GeneralSettings = () => {
 					})}
 				</Button>
 			</Grid.Item>
+			<Grid.Item s={12}>
+				<Typography variant="beta">
+					{formatMessage({
+						id: getTranslation('view.settings.section.calendar.event-status-color.title'),
+						defaultMessage: 'Event Status Color',
+					})}
+				</Typography>
+			</Grid.Item>
+			<Grid.Item col={3} s={12}>
+				<Field.Root style={{ width: '100%' }} required>
+					<Flex gap={10}>
+						{collectionStatuses &&
+							collectionStatuses.map((status) => {
+								const existing = settings.eventStatus?.find(
+									(s) => s.field === settings.colorField && s.value === status.value
+								);
+
+								return (
+									<Box key={status.value}>
+										<Field.Label>{status.value}</Field.Label>
+
+										<ColorWindow
+											color={existing?.color || settings.eventColor}
+											onClick={() =>
+												setPopover((current) => (current === status.value ? null : status.value))
+											}
+										/>
+
+										{popOver === status.value && (
+											<PopOver>
+												<Cover onClick={() => setPopover(null)} />
+												<ChromePicker
+													color={existing?.color || settings.eventColor}
+													onChangeComplete={(e) => {
+														const updated = [
+															...(settings.eventStatus ?? []).filter(
+																(s) =>
+																	!(s.field === settings.colorField && s.value === status.value)
+															),
+															{
+																field: settings.colorField!,
+																value: status.value!,
+																color: e.hex,
+															},
+														];
+														updateField({ eventStatus: updated });
+														setPopover(null);
+													}}
+												/>
+											</PopOver>
+										)}
+									</Box>
+								);
+							})}
+					</Flex>
+				</Field.Root>
+			</Grid.Item>
+			<Grid.Item s={12}></Grid.Item>
 		</Grid.Root>
 	);
 };
+
+const ColorWindow = styled.div`
+	background-color: ${(props) => props.color};
+	border: ${(props) => props.color === '#FFFFFF' && '1px solid #5B5F65'};
+	width: 3rem;
+	height: 3rem;
+	border-radius: 10%;
+	cursor: pointer;
+`;
+
+const PopOver = styled.div`
+	position: absolute;
+	margin-top: 10px;
+	z-index: 10;
+`;
+
+const Cover = styled.div`
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+`;
 
 export default GeneralSettings;

@@ -14,6 +14,7 @@ export interface IPluginController {
 	getData(ctx: Context): Promise<void>;
 	getCollections(ctx: Context): Promise<void>;
 	getCollectionFilters(ctx: any): Promise<void>;
+	getCollectionStatuses(ctx: any): Promise<void>;
 	getExtensions(ctx: Context): Promise<void>;
 	getSettings(ctx: Context): Promise<void>;
 	setSettings(ctx: Context): Promise<void>;
@@ -41,6 +42,11 @@ export type SettingsType = {
 	createButton: boolean;
 	primaryColor: string;
 	eventColor: string;
+	eventStatus: Array<{
+		field: null | string;
+		value: null | string;
+		color: null | string;
+	}>;
 	collectionFilters: Array<{
 		field: null | string;
 		operator: null | string;
@@ -63,9 +69,11 @@ export type ExtensionType = {
 	startFields: string[];
 	endFields: string[];
 	filterFields?: string[];
+	eventStatus?: { field: string; value: string; color?: string }[];
 	startHandler?: Function;
 	endHandler?: Function;
 	filterHandler?: Function;
+	statusHandler?: (entry: any) => string;
 };
 
 export type ExtensionsMapType = Record<
@@ -75,9 +83,11 @@ export type ExtensionsMapType = Record<
 		startFields: string[];
 		endFields: string[];
 		filterFields?: string[];
+		eventStatus?: { field: string; value: string; color?: string }[];
 		startHandler?: Function;
 		endHandler?: Function;
 		filterHandler?: Function;
+		statusHandler?: (entry: any) => string;
 	}
 >;
 

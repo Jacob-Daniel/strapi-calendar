@@ -19,6 +19,13 @@ const defaultSettings: SettingsType = {
 	createButton: true,
 	primaryColor: '#4945ff',
 	eventColor: '#4945ff',
+	eventStatus: [
+		{
+			field: null,
+			value: null,
+			color: null,
+		},
+	],
 	collectionFilters: [
 		{
 			field: null,

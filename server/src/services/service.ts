@@ -33,21 +33,26 @@ const service = ({ strapi }: { strapi: Core.Strapi }) => ({
 		});
 
 		// Map data into the required format
-		return dataFiltered.map((x) => ({
-			id: x.documentId,
-			title: config.titleField ? x[config.titleField] : config.startField,
-			start: normalizeDateValue(x[config.startField]),
-			end: normalizeDateValue(
-				config.endField
-					? x[config.endField]
-					: moment(x[config.startField]).add(config.defaultDuration, 'minutes')
-			),
-			backgroundColor:
-				config.colorField && x[config.colorField] ? x[config.colorField] : config.eventColor,
-			borderColor:
-				config.colorField && x[config.colorField] ? x[config.colorField] : config.eventColor,
-			url: `/admin/content-manager/collection-types/${config.collection}/${x.documentId}`,
-		}));
+		return dataFiltered.map((x) => {
+			const extension = extensionSystem.getRegisteredExtensions()[config.collection];
+
+			const status = extension?.statusHandler?.(x) ?? x[config.colorField];
+			const color = config.eventStatus?.find((s) => s.value === status)?.color ?? config.eventColor;
+
+			return {
+				id: x.documentId,
+				title: config.titleField ? x[config.titleField] : config.startField,
+				start: normalizeDateValue(x[config.startField]),
+				end: normalizeDateValue(
+					config.endField
+						? x[config.endField]
+						: moment(x[config.startField]).add(config.defaultDuration, 'minutes')
+				),
+				backgroundColor: color,
+				borderColor: color,
+				url: `/admin/content-manager/collection-types/${config.collection}/${x.documentId}`,
+			};
+		});
 	},
 
 	/**
@@ -77,6 +82,29 @@ const service = ({ strapi }: { strapi: Core.Strapi }) => ({
 	},
 
 	/**
+	 * Get status fields for a content type
+	 */
+	getCollectionStatuses: async (contentType: string): Promise<SettingsType['eventStatus']> => {
+		const model = strapi.getModel(contentType as any);
+		if (!model || !model.attributes) return [];
+
+		const result: SettingsType['eventStatus'] = [];
+
+		Object.entries(model.attributes).forEach(([field, attr]: [string, any]) => {
+			if (attr.type === 'enumeration' && Array.isArray(attr.enum)) {
+				attr.enum.forEach((enumValue: string) => {
+					result.push({
+						field,
+						value: enumValue,
+						color: '#cccccc', // placeholder or fetch from settings
+					});
+				});
+			}
+		});
+		return result;
+	},
+
+	/**
 	 * Retrieves all registered extensions.
 	 */
 	getExtensions: async (): Promise<any[]> => {
@@ -85,6 +113,7 @@ const service = ({ strapi }: { strapi: Core.Strapi }) => ({
 			name: extension.name,
 			startFields: extension.startFields,
 			endFields: extension.endFields,
+			eventStatus: extension.eventStatus || null,
 		}));
 	},
 

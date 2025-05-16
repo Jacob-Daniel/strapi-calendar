@@ -34,6 +34,23 @@ const createController = ({ strapi }: { strapi: Core.Strapi }): IPluginControlle
 			ctx.throw(500, err);
 		}
 	},
+	async getCollectionStatuses(ctx: any): Promise<void> {
+		try {
+			const { contentType } = ctx.query;
+
+			if (!contentType) {
+				ctx.throw(400, 'Content type is required');
+				return;
+			}
+
+			ctx.body = await strapi
+				.plugin(PLUGIN_ID)
+				.service('service')
+				.getCollectionStatuses(contentType);
+		} catch (err) {
+			ctx.throw(500, err);
+		}
+	},
 	async getExtensions(ctx: any): Promise<void> {
 		try {
 			const extensions = await strapi.plugin(PLUGIN_ID).service('service').getExtensions();
