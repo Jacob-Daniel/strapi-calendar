@@ -1,5 +1,4 @@
 import React from 'react';
-// @ts-ignore-next-line
 import { Layouts } from '@strapi/admin/strapi-admin';
 import { Cog, Plus } from '@strapi/icons';
 import tinyColor from 'tinycolor2';
