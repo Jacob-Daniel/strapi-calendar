@@ -1,7 +1,5 @@
 import React from 'react';
-// @ts-ignore-next-line
 import { Layouts } from '@strapi/admin/strapi-admin';
-// @ts-ignore-next-line
 import { useNotification } from '@strapi/strapi/admin';
 import { Box, Button, Divider, Loader } from '@strapi/design-system';
 import { useIntl } from 'react-intl';
